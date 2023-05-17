@@ -5,8 +5,12 @@ import admin from '../services/firebase';
 const db = admin.firestore();
 
 export const getUser = async (req: Request, res: Response): Promise<void> => {
-  const uid: string = req.params.uid;
   try {
+    const idToken: string = req.body.idToken;
+
+    const decodedToken: admin.auth.DecodedIdToken =
+      await getAuth().verifyIdToken(idToken);
+    const uid: string = decodedToken.uid;
     const userRecord: admin.auth.UserRecord = await getAuth().getUser(uid);
     if (!userRecord) {
       res.status(404).json({ error: 'User not found' });
