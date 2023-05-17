@@ -9,10 +9,11 @@ import {
 
 const router = Router();
 
-router.get('/user/:uid', getUser);
-router.get('/users', getAllUsers);
+router.get('/test', (req, res) => res.send('User route is working'));
+router.get('/all', getAllUsers);
+router.get('/:uid', getUser);
 router.post('/register', registerUser);
-router.put('/user/:uid', updateUser);
-router.delete('/user/:uid', deleteUserAt);
+router.put('/:uid', updateUser);
+router.delete('/:uid', deleteUserAt);
 
 export default router;

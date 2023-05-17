@@ -56,7 +56,7 @@ export const deleteUserAt = async (
   const uid = req.params.uid;
   try {
     await getAuth().deleteUser(uid);
-    const userRef = await admin.firestore().collection('users').doc(uid);
+    const userRef = admin.firestore().collection('users').doc(uid);
     await userRef.update({
       deletedAt: admin.firestore.FieldValue.serverTimestamp(),
     });
@@ -96,7 +96,7 @@ export const updateUser = async (
       displayName: req.body.displayName,
       photoURL: req.body.photoURL,
     });
-    const userRef = await admin.firestore().collection('users').doc(uid);
+    const userRef = admin.firestore().collection('users').doc(uid);
     await userRef.update({
       email: userRecord.email,
       displayName: userRecord.displayName,
