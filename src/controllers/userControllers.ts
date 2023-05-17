@@ -5,20 +5,23 @@ import admin from '../services/firebase';
 const db = admin.firestore();
 
 export const getUser = async (req: Request, res: Response): Promise<void> => {
-  const uid = req.params.uid;
+  const uid: string = req.params.uid;
   try {
-    const userInAuth = await getAuth().getUser(uid);
-    if (!userInAuth) {
+    const userRecord: admin.auth.UserRecord = await getAuth().getUser(uid);
+    if (!userRecord) {
       res.status(404).json({ error: 'User not found' });
       return;
     }
-    const userRecord = await db.collection('users').doc(userInAuth.uid).get();
-    const user = userRecord.data();
+    const userDoc: admin.firestore.DocumentSnapshot = await db
+      .collection('users')
+      .doc(userRecord.uid)
+      .get();
+    const user: object = userDoc.data();
     res.json(user);
   } catch (error) {
     console.error('Error fetching user data:', error);
-    const statusCode = error.code || 500;
-    const errorMessage = error.message || 'Could not fetch user';
+    const statusCode: number = error.code || 500;
+    const errorMessage: string = error.message || 'Could not fetch user';
     res.status(statusCode).json({ error: errorMessage });
   }
 };
@@ -51,8 +54,9 @@ export const registerUser = async (
     res.json(userRecord);
   } catch (error) {
     console.error(error);
-    const statusCode = error.code || 500;
-    const errorMessage = error.message || 'An unexpected error occurred.';
+    const statusCode: number = error.code || 500;
+    const errorMessage: string =
+      error.message || 'An unexpected error occurred.';
     res.status(statusCode).json({ error: errorMessage });
   }
 };
@@ -61,17 +65,19 @@ export const deleteUserAt = async (
   req: Request,
   res: Response,
 ): Promise<void> => {
-  const uid = req.params.uid;
+  const uid: string = req.params.uid;
   try {
     await getAuth().deleteUser(uid);
-    const userRef = db.collection('users').doc(uid);
+    const userRef: admin.firestore.DocumentReference = db
+      .collection('users')
+      .doc(uid);
     await userRef.update({
       deletedAt: admin.firestore.FieldValue.serverTimestamp(),
     });
     res.json('Delete Success');
   } catch (error) {
-    const statusCode = error.code || 500;
-    const errorMessage = error.message || 'Could not delete user';
+    const statusCode: number = error.code || 500;
+    const errorMessage: string = error.message || 'Could not delete user';
     console.error('Error deleting user:', error);
     res.status(statusCode).json({ error: errorMessage });
   }
@@ -82,11 +88,11 @@ export const getAllUsers = async (
   res: Response,
 ): Promise<void> => {
   try {
-    const userRecord = await getAuth().listUsers();
+    const userRecord: object = await getAuth().listUsers();
     res.json(userRecord);
   } catch (error) {
-    const statusCode = error.code || 500;
-    const errorMessage = error.message || 'Could not fetch users';
+    const statusCode: number = error.code || 500;
+    const errorMessage: string = error.message || 'Could not fetch users';
     console.error('Error fetching users:', error);
     res.status(statusCode).json({ error: errorMessage });
   }
@@ -96,15 +102,17 @@ export const updateUser = async (
   req: Request,
   res: Response,
 ): Promise<void> => {
-  const uid = req.params.uid;
+  const uid: string = req.params.uid;
   try {
-    const userRecord = await getAuth().updateUser(uid, {
+    const userRecord: admin.auth.UserRecord = await getAuth().updateUser(uid, {
       email: req.body.email,
       password: req.body.password,
       displayName: req.body.displayName,
       photoURL: req.body.photoURL,
     });
-    const userRef = db.collection('users').doc(uid);
+    const userRef: admin.firestore.DocumentReference = db
+      .collection('users')
+      .doc(uid);
     await userRef.update({
       email: userRecord.email,
       displayName: userRecord.displayName,
@@ -113,8 +121,8 @@ export const updateUser = async (
     });
     res.json(userRecord);
   } catch (error) {
-    const statusCode = error.code || 500;
-    const errorMessage = error.message || 'Could not update user';
+    const statusCode: number = error.code || 500;
+    const errorMessage: string = error.message || 'Could not update user';
     console.error('Error updating user:', error);
     res.status(statusCode).json({ error: errorMessage });
   }
