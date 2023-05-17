@@ -9,7 +9,9 @@ export const getUser = async (req: Request, res: Response): Promise<void> => {
     res.json(userRecord);
   } catch (error) {
     console.error('Error fetching user data:', error);
-    res.status(500).json({ error: 'Could not fetch user' });
+    const statusCode = error.code || 500;
+    const errorMessage = error.message || 'Could not fetch user';
+    res.status(statusCode).json({ error: errorMessage });
   }
 };
 
@@ -40,8 +42,10 @@ export const registerUser = async (
     });
     res.json(userRecord);
   } catch (error) {
-    console.error('Error creating user:', error);
-    res.status(500).json({ error: 'Could not create user' });
+    console.error(error);
+    const statusCode = error.code || 500;
+    const errorMessage = error.message || 'An unexpected error occurred.';
+    res.status(statusCode).json({ error: errorMessage });
   }
 };
 
@@ -58,8 +62,10 @@ export const deleteUserAt = async (
     });
     res.json('Delete Success');
   } catch (error) {
+    const statusCode = error.code || 500;
+    const errorMessage = error.message || 'Could not delete user';
     console.error('Error deleting user:', error);
-    res.status(500).json({ error: 'Could not delete user' });
+    res.status(statusCode).json({ error: errorMessage });
   }
 };
 
@@ -71,8 +77,10 @@ export const getAllUsers = async (
     const userRecord = await getAuth().listUsers();
     res.json(userRecord);
   } catch (error) {
+    const statusCode = error.code || 500;
+    const errorMessage = error.message || 'Could not fetch users';
     console.error('Error fetching users:', error);
-    res.status(500).json({ error: 'Could not fetch users' });
+    res.status(statusCode).json({ error: errorMessage });
   }
 };
 
@@ -97,7 +105,9 @@ export const updateUser = async (
     });
     res.json(userRecord);
   } catch (error) {
+    const statusCode = error.code || 500;
+    const errorMessage = error.message || 'Could not update user';
     console.error('Error updating user:', error);
-    res.status(500).json({ error: 'Could not update user' });
+    res.status(statusCode).json({ error: errorMessage });
   }
 };
