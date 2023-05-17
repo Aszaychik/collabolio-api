@@ -1,10 +1,8 @@
 import * as admin from 'firebase-admin';
-import * as firebaseServiceAccountKey from './firebaseServiceAccountKey.json';
+import * as serviceAccountKey from './serviceAccountKey.json';
 
 admin.initializeApp({
-  credential: admin.credential.cert(
-    firebaseServiceAccountKey as admin.ServiceAccount,
-  ),
+  credential: admin.credential.cert(serviceAccountKey as admin.ServiceAccount),
   databaseURL: 'https://collabolio-dev.firebaseio.com',
 });
 
