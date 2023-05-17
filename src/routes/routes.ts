@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import authRouter from './authRoutes';
+import authRouter from './userRoutes';
 import { helloWorld } from '../controllers';
 
 // Create router
