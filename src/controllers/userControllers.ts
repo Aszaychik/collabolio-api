@@ -2,11 +2,19 @@ import { Request, Response } from 'express';
 import { getAuth } from 'firebase-admin/auth';
 import admin from '../services/firebase';
 
+const db = admin.firestore();
+
 export const getUser = async (req: Request, res: Response): Promise<void> => {
   const uid = req.params.uid;
   try {
-    const userRecord = await getAuth().getUser(uid);
-    res.json(userRecord);
+    const userInAuth = await getAuth().getUser(uid);
+    if (!userInAuth) {
+      res.status(404).json({ error: 'User not found' });
+      return;
+    }
+    const userRecord = await db.collection('users').doc(userInAuth.uid).get();
+    const user = userRecord.data();
+    res.json(user);
   } catch (error) {
     console.error('Error fetching user data:', error);
     const statusCode = error.code || 500;
@@ -29,7 +37,7 @@ export const registerUser = async (
       photoURL:
         req.body.photoURL || 'https://api.dicebear.com/6.x/pixel-art/svg',
     });
-    await admin.firestore().collection('users').doc(userRecord.uid).set({
+    await db.collection('users').doc(userRecord.uid).set({
       email: userRecord.email,
       emailVerified: userRecord.emailVerified,
       displayName: userRecord.displayName,
@@ -56,7 +64,7 @@ export const deleteUserAt = async (
   const uid = req.params.uid;
   try {
     await getAuth().deleteUser(uid);
-    const userRef = admin.firestore().collection('users').doc(uid);
+    const userRef = db.collection('users').doc(uid);
     await userRef.update({
       deletedAt: admin.firestore.FieldValue.serverTimestamp(),
     });
@@ -96,7 +104,7 @@ export const updateUser = async (
       displayName: req.body.displayName,
       photoURL: req.body.photoURL,
     });
-    const userRef = admin.firestore().collection('users').doc(uid);
+    const userRef = db.collection('users').doc(uid);
     await userRef.update({
       email: userRecord.email,
       displayName: userRecord.displayName,
