@@ -11,7 +11,6 @@ export const authorization = (
     if (!idToken) {
       return res.status(401).send('Unauthorized');
     }
-    req.body.idToken = idToken;
     next();
   } catch (error) {
     console.error('Error fetching user data:', error);
