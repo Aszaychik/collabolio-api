@@ -1,12 +1,10 @@
 import { Router } from 'express';
-import userRoutes from './userRoutes';
-import { helloWorld } from '../controllers';
+import { helloWorld } from '../controllers/helloControllers';
 
 // Create router
 const router = Router();
 
 // Routes
 router.get('/', helloWorld);
-router.use('/api/user', userRoutes);
 
 export default router;
