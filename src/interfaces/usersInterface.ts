@@ -1,6 +1,6 @@
 import { ObjectId } from 'mongoose';
 
-export interface Users {
+export interface IUsers {
   _id: ObjectId;
   username: string;
   googleId?: string;
