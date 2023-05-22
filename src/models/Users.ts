@@ -106,7 +106,7 @@ const userSchema: Schema = new mongoose.Schema({
         },
       ],
     },
-    required: true,
+    required: false,
   },
 });
 
