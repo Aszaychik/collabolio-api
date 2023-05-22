@@ -1,10 +1,14 @@
-import express, { Application } from 'express';
-import routes from './routes/routes.js';
-import cors from 'cors';
 import dotenv from 'dotenv';
-// import { authorization } from './middleware/authorization.js';
 
 dotenv.config(); // Configure the environment variables
+
+import express, { Application } from 'express';
+import routes from './routes/routes';
+import cors from 'cors';
+// import { authorization } from './middleware/authorization.js';
+import db from './db/mongoDb';
+
+db;
 
 export const app: Application = express(); // Create the Express application
 
