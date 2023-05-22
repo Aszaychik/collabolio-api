@@ -31,7 +31,7 @@ export const register = async (req: Request, res: Response) => {
     );
 
     // Return the token
-    res.status(201).json({ token });
+    res.status(201).json({ token, username, email });
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: 'Server error' });
@@ -58,7 +58,7 @@ export const login = async (req: Request, res: Response) => {
     const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET || '');
 
     // Return the token
-    res.status(200).json({ token });
+    res.status(200).json({ token, email });
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: 'Server error' });
