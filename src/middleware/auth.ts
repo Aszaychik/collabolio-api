@@ -1,6 +1,6 @@
-import jwt from 'jsonwebtoken';
+import jwt, { JwtPayload } from 'jsonwebtoken';
 import { Request, Response, NextFunction } from 'express';
-import { IToken } from '../interfaces/IToken';
+import Users from '../models/Users';
 
 export const authMiddleware = (
   req: Request,
@@ -13,41 +13,20 @@ export const authMiddleware = (
     return res.status(401).json({ message: 'Authorization header missing' });
   }
 
-  const token = authHeader.split(' ')[1];
+  const token: string = authHeader.split(' ')[1];
 
   try {
-    const decodedToken = jwt.verify(
-      token,
-      process.env.JWT_SECRET || '',
-    ) as IToken;
-    req.body.token = decodedToken.token;
-    next();
-  } catch (error) {
-    console.error(error);
-    res.status(401).json({ message: 'Invalid or expired token' });
-  }
-};
+    const decodedToken = jwt.verify(token, process.env.JWT_SECRET as string);
+    const { id } = decodedToken as JwtPayload;
 
-export const authAdminMiddleware = (
-  req: Request,
-  res: Response,
-  next: NextFunction,
-) => {
-  const { token } = req.body;
-  if (!token) {
-    if (!token) {
-      return res.status(401).json({ message: 'Token not found' });
+    const user = Users.findById(id);
+    if (!user) {
+      return res.status(401).json({ message: 'Invalid or expired token' });
     }
-  }
-  try {
-    const decodedToken = jwt.verify(
-      token,
-      process.env.JWT_SECRET || '',
-    ) as IToken;
-    req.body.token = decodedToken.token;
+    req.body.currentUser = user;
     next();
   } catch (error) {
     console.error(error);
-    res.status(401).json({ message: 'Invalid or expired token' });
+    return res.status(401).json({ message: error.message });
   }
 };
