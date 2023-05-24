@@ -34,6 +34,18 @@ export const getUsers = async (req: Request, res: Response) => {
   }
 };
 
+export const createUser = async (req: Request, res: Response) => {
+  try {
+    const { username, email, password } = req.body;
+    const user = await Users.create({ username, email, password });
+    res
+      .status(200)
+      .json({ message: 'User created successfully', user, statusCode: 200 });
+  } catch (error) {
+    res.status(500).json({ message: error.message, statusCode: 500 });
+  }
+};
+
 export const deleteUser = async (req: Request, res: Response) => {
   try {
     const { id } = req.params;
