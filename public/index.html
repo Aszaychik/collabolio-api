@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Welcome to the Collabolio API!</title>
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css"
+    />
+  </head>
+  <body>
+    <div class="container py-5">
+      <h1 class="display-4">Welcome to the Collabolio API!</h1>
+      <p class="lead">
+        This API allows you to manage users. To get started, use the following
+        endpoints:
+      </p>
+      <ul>
+        <li>GET /api/user -returns a list of all users</li>
+        <li>GET /api/user/:id - returns a single user by ID</li>
+        <li>POST /api/user - creates a new user</li>
+        <li>PUT /api/user/:id - updates a user by ID</li>
+        <li>DELETE /api/user/:id - deletes a user by ID</li>
+      </ul>
+      <p>
+        All endpoints are accessed via HTTP and return JSON responses. The API
+        is secured using JWT authentication. To use the API, you'll needto
+        obtain an access token by authenticating using your credentials.
+      </p>
+      <p>To manage authentication, use the following endpoints:</p>
+      <ul>
+        <li>
+          POST /api/auth/login - logs in a user and returns an access token
+        </li>
+        <li>POST /api/auth/register - creates a new user account</li>
+      </ul>
+      <p>
+        For more information on how to use the API, please refer to the
+        documentation.
+      </p>
+      <p>Thank you for using the Collabolio API!</p>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js"></script>
+  </body>
+</html>

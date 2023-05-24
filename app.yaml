@@ -1,0 +1,10 @@
+runtime: nodejs16
+
+env_variables:
+  PORT: '8080'
+  MONGO_DB: 'mongodb+srv://aszaychik:njpQKZaIUYUQZadB@collabolio.pz75dki.mongodb.net/?retryWrites=true&w=majority'
+  JWT_SECRET: 'njpQKZaIUYUQZadB'
+
+handlers:
+  - url: /.*
+    script: npm run serve
