@@ -24,51 +24,6 @@ export const getUser = async (req: Request, res: Response) => {
   }
 };
 
-export const getUsers = async (req: Request, res: Response) => {
-  try {
-    const users = await Users.find();
-    res
-      .status(200)
-      .json({ message: 'Users found successfully', users, statusCode: 200 });
-  } catch (error) {
-    res.status(500).json({ message: error.message, statusCode: 500 });
-  }
-};
-
-export const createUser = async (req: Request, res: Response) => {
-  try {
-    const { username, email, password } = req.body;
-    const hashedPassword = await bcrypt.hash(password, 10);
-
-    const user = await Users.create({
-      username,
-      email,
-      password: hashedPassword,
-    });
-    res
-      .status(200)
-      .json({ message: 'User created successfully', user, statusCode: 200 });
-  } catch (error) {
-    res.status(500).json({ message: error.message, statusCode: 500 });
-  }
-};
-
-export const deleteUser = async (req: Request, res: Response) => {
-  try {
-    const { _id } = req.params;
-    const user = await Users.findByIdAndDelete(_id);
-    if (user) {
-      res
-        .status(200)
-        .json({ message: 'User deleted successfully', user, statusCode: 200 });
-    } else {
-      res.status(404).json({ message: 'User not found', statusCode: 404 });
-    }
-  } catch (error) {
-    res.status(500).json({ message: error.message, statusCode: 500 });
-  }
-};
-
 export const updateUser = async (req: Request, res: Response) => {
   try {
     const { _id } = req.body.currentUser;
@@ -90,3 +45,48 @@ export const updateUser = async (req: Request, res: Response) => {
     res.status(500).json({ message: error.message, statusCode: 500 });
   }
 };
+
+// export const getUsers = async (req: Request, res: Response) => {
+//   try {
+//     const users = await Users.find();
+//     res
+//       .status(200)
+//       .json({ message: 'Users found successfully', users, statusCode: 200 });
+//   } catch (error) {
+//     res.status(500).json({ message: error.message, statusCode: 500 });
+//   }
+// };
+
+// export const createUser = async (req: Request, res: Response) => {
+//   try {
+//     const { username, email, password } = req.body;
+//     const hashedPassword = await bcrypt.hash(password, 10);
+
+//     const user = await Users.create({
+//       username,
+//       email,
+//       password: hashedPassword,
+//     });
+//     res
+//       .status(200)
+//       .json({ message: 'User created successfully', user, statusCode: 200 });
+//   } catch (error) {
+//     res.status(500).json({ message: error.message, statusCode: 500 });
+//   }
+// };
+
+// export const deleteUser = async (req: Request, res: Response) => {
+//   try {
+//     const { _id } = req.params;
+//     const user = await Users.findByIdAndDelete(_id);
+//     if (user) {
+//       res
+//         .status(200)
+//         .json({ message: 'User deleted successfully', user, statusCode: 200 });
+//     } else {
+//       res.status(404).json({ message: 'User not found', statusCode: 404 });
+//     }
+//   } catch (error) {
+//     res.status(500).json({ message: error.message, statusCode: 500 });
+//   }
+// };
