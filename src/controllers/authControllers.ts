@@ -15,10 +15,20 @@ export const register = async (req: Request, res: Response) => {
         .json({ message: 'Username, email and password are required' });
     }
 
-    // Check if the user already exists
+    //Check if the username not contain space
+    if (reqBody.username.includes(' ')) {
+      return res.status(400).json({ message: 'Username cannot contain space' });
+    }
+
+    // Check if the username already exists
+    if (await Users.findOne({ username: reqBody.username })) {
+      return res.status(400).json({ message: 'Username already exists' });
+    }
+
+    // Check if the user email already exists
     const user = await Users.findOne({ email: reqBody.email });
     if (user) {
-      return res.status(400).json({ message: 'User already exists' });
+      return res.status(400).json({ message: 'User email already exists' });
     }
 
     // Hash the password
