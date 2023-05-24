@@ -12,6 +12,12 @@ export const getUsers = async (req: Request, res: Response) => {
   res.json(users);
 };
 
+export const deleteUser = async (req: Request, res: Response) => {
+  const { id } = req.params;
+  const user = await Users.findByIdAndDelete(id);
+  res.json(user);
+};
+
 export const updateUser = async (req: Request, res: Response) => {
   const { id } = req.params;
   const { username, email, password } = req.body;
