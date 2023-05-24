@@ -6,3 +6,8 @@ export const getUser = async (req: Request, res: Response) => {
   const user = await Users.findById(id);
   res.json(user);
 };
+
+export const getUsers = async (req: Request, res: Response) => {
+  const users = await Users.find();
+  res.json(users);
+};
