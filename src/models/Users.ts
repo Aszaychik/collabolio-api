@@ -2,7 +2,10 @@ import mongoose, { Schema } from 'mongoose';
 import { IUsers } from '../interfaces/IUsers';
 
 const userSchema: Schema = new mongoose.Schema({
-  username: String,
+  username: {
+    type: String,
+    required: true,
+  },
   googleId: {
     type: String,
     required: false,
@@ -45,7 +48,7 @@ const userSchema: Schema = new mongoose.Schema({
       displayName: String,
       phoneNumber: String,
       bio: String,
-      photoURL: String,
+      avatarURL: String,
       location: String,
       skills: [
         {
@@ -105,6 +108,10 @@ const userSchema: Schema = new mongoose.Schema({
           url: String,
         },
       ],
+    },
+    default: {
+      avatarURL:
+        'https://storage.googleapis.com/collabolio-dev.appspot.com/assets/images/avatars/default-avatar.png',
     },
     required: false,
   },
