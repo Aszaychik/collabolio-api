@@ -11,3 +11,14 @@ export const getUsers = async (req: Request, res: Response) => {
   const users = await Users.find();
   res.json(users);
 };
+
+export const updateUser = async (req: Request, res: Response) => {
+  const { id } = req.params;
+  const { username, email, password } = req.body;
+  const user = await Users.findByIdAndUpdate(
+    id,
+    { username, email, password },
+    { new: true },
+  );
+  res.json(user);
+};
