@@ -1,5 +1,6 @@
 import { Request, Response } from 'express';
 import bcrypt from 'bcrypt';
+import crypto from 'crypto';
 import jwt from 'jsonwebtoken';
 import Users from '../models/Users';
 import { loginIAuth, registerIAuth } from '../interfaces/IAuth';
@@ -83,7 +84,11 @@ export const login = async (req: Request, res: Response) => {
     }
 
     // Generate JWT token
-    const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET || '');
+    const jwtSecret = () => {
+      const secret = crypto.randomBytes(32);
+      return secret.toString('base64');
+    };
+    const token = jwt.sign({ userId: user._id }, jwtSecret());
 
     // Return the token
     res.status(200).json({ token });
