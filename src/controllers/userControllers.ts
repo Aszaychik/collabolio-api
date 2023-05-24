@@ -4,18 +4,24 @@ import Users from '../models/Users';
 export const getUser = async (req: Request, res: Response) => {
   const { id } = req.params;
   const user = await Users.findById(id);
-  res.json(user);
+  res
+    .json({ message: 'User found successfully', user, statusCode: 200 })
+    .status(200);
 };
 
 export const getUsers = async (req: Request, res: Response) => {
   const users = await Users.find();
-  res.json(users);
+  res
+    .json({ message: 'Users found successfully', users, statusCode: 200 })
+    .status(200);
 };
 
 export const deleteUser = async (req: Request, res: Response) => {
   const { id } = req.params;
   const user = await Users.findByIdAndDelete(id);
-  res.json(user);
+  res
+    .json({ message: 'User deleted successfully', user, statusCode: 200 })
+    .status(200);
 };
 
 export const updateUser = async (req: Request, res: Response) => {
@@ -26,5 +32,7 @@ export const updateUser = async (req: Request, res: Response) => {
     { username, email, password },
     { new: true },
   );
-  res.json(user);
+  res
+    .json({ message: 'User updated successfully', user, statusCode: 200 })
+    .status(200);
 };
