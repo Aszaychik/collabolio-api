@@ -2,24 +2,32 @@ import { Request, Response } from 'express';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import Users from '../models/Users';
+import { loginIAuth, registerIAuth } from '../interfaces/IAuth';
 
 export const register = async (req: Request, res: Response) => {
   try {
-    const { username, email, password } = req.body;
+    const reqBody: registerIAuth = req.body;
+
+    // Check if the username, email and password are provided
+    if (!reqBody.username || !reqBody.email || !reqBody.password) {
+      return res
+        .status(400)
+        .json({ message: 'Username, email and password are required' });
+    }
 
     // Check if the user already exists
-    const user = await Users.findOne({ email });
+    const user = await Users.findOne({ email: reqBody.email });
     if (user) {
       return res.status(400).json({ message: 'User already exists' });
     }
 
     // Hash the password
-    const hashedPassword = await bcrypt.hash(password, 10);
+    const hashedPassword = await bcrypt.hash(reqBody.password, 10);
 
     // Save the new user to the database
     const newUser = new Users({
-      username,
-      email,
+      username: reqBody.username,
+      email: reqBody.email,
       password: hashedPassword,
     });
     await newUser.save();
@@ -31,7 +39,7 @@ export const register = async (req: Request, res: Response) => {
     );
 
     // Return the token
-    res.status(201).json({ token, username, email });
+    res.status(201).json({ token });
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: 'Server error' });
@@ -40,16 +48,26 @@ export const register = async (req: Request, res: Response) => {
 
 export const login = async (req: Request, res: Response) => {
   try {
-    const { email, password } = req.body;
+    const reqBody: loginIAuth = req.body;
+
+    // Check if the email and password are provided
+    if (!reqBody.email || !reqBody.password) {
+      return res
+        .status(400)
+        .json({ message: 'Email and password are required' });
+    }
 
     // Checkif the user exists
-    const user = await Users.findOne({ email });
+    const user = await Users.findOne({ email: reqBody.email });
     if (!user) {
       return res.status(400).json({ message: 'Invalid credentials' });
     }
 
     // Check if the password is correct
-    const isPasswordCorrect = await bcrypt.compare(password, user.password);
+    const isPasswordCorrect = await bcrypt.compare(
+      reqBody.password,
+      user.password,
+    );
     if (!isPasswordCorrect) {
       return res.status(400).json({ message: 'Invalid credentials' });
     }
@@ -58,7 +76,7 @@ export const login = async (req: Request, res: Response) => {
     const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET || '');
 
     // Return the token
-    res.status(200).json({ token, email });
+    res.status(200).json({ token });
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: 'Server error' });
