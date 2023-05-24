@@ -48,9 +48,17 @@ const userSchema: Schema = new mongoose.Schema({
     type: {
       displayName: String,
       phoneNumber: String,
+      age: Number,
+      birthDate: Date,
+      isMale: Boolean,
       bio: String,
       avatarURL: String,
-      location: String,
+      location: {
+        country: String,
+        city: String,
+        lat: Number,
+        lng: Number,
+      },
       skills: [
         {
           name: String,
