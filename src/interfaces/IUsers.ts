@@ -14,9 +14,15 @@ export interface IUsers {
   profile: {
     displayName: string;
     phoneNumber?: string;
+    age: number;
+    birthDate: Date;
+    isMale: boolean;
     bio: string;
     photoURL: string;
-    location?: string;
+    location?: {
+      lat: number;
+      lng: number;
+    };
     skills?: { name: string }[];
     interests?: { name: string }[];
     experience?: {

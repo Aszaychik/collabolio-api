@@ -1,53 +1,39 @@
-import jwt from 'jsonwebtoken';
+import jwt, { JwtPayload, VerifyErrors } from 'jsonwebtoken';
 import { Request, Response, NextFunction } from 'express';
-import { IToken } from '../interfaces/IToken';
+import Users from '../models/Users';
 
-export const authMiddleware = (
+export const authMiddleware = async (
   req: Request,
   res: Response,
   next: NextFunction,
 ) => {
   const authHeader = req.headers.authorization;
-
-  if (!authHeader) {
-    return res.status(401).json({ message: 'Authorization header missing' });
+  if (!authHeader || !authHeader.startsWith('Bearer ')) {
+    return res.status(401).json({ message: 'Bearer token missing or invalid' });
   }
-
-  const token = authHeader.split(' ')[1];
+  const token: string = authHeader.split(' ')[1];
 
   try {
-    const decodedToken = jwt.verify(
+    jwt.verify(
       token,
-      process.env.JWT_SECRET || '',
-    ) as IToken;
-    req.body.token = decodedToken.token;
-    next();
+      process.env.JWT_SECRET,
+      async (err: VerifyErrors, payload: JwtPayload) => {
+        if (err) {
+          return res.status(401).json({ err });
+        }
+        console.log(payload);
+        const { userId } = payload;
+        const user = await Users.findById(userId);
+        console.log(userId);
+        if (!user) {
+          return res.status(401).json({ message: 'User not found' });
+        }
+        req.body.currentUser = user;
+        next();
+      },
+    );
   } catch (error) {
     console.error(error);
-    res.status(401).json({ message: 'Invalid or expired token' });
-  }
-};
-
-export const authAdminMiddleware = (
-  req: Request,
-  res: Response,
-  next: NextFunction,
-) => {
-  const { token } = req.body;
-  if (!token) {
-    if (!token) {
-      return res.status(401).json({ message: 'Token not found' });
-    }
-  }
-  try {
-    const decodedToken = jwt.verify(
-      token,
-      process.env.JWT_SECRET || '',
-    ) as IToken;
-    req.body.token = decodedToken.token;
-    next();
-  } catch (error) {
-    console.error(error);
-    res.status(401).json({ message: 'Invalid or expired token' });
+    return res.status(401).json({ message: error.message });
   }
 };
