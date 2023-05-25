@@ -21,10 +21,8 @@ export const authMiddleware = async (
         if (err) {
           return res.status(401).json({ err });
         }
-        console.log(payload);
         const { userId } = payload;
         const user = await Users.findById(userId);
-        console.log(userId);
         if (!user) {
           return res.status(401).json({ message: 'User not found' });
         }
