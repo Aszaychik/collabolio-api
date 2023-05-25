@@ -1,42 +1,211 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
   <head>
-    <title>Welcome to the Collabolio API!</title>
+    <meta charset="UTF-8" />
+    <title>Collabolio API</title>
     <link
       rel="stylesheet"
-      href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
     />
   </head>
-  <body>
-    <div class="container py-5">
-      <h1 class="display-4">Welcome to the Collabolio API!</h1>
-      <p class="lead">
-        This API allows you to manage users. To get started, use the following
-        endpoints:
-      </p>
+  <body class="">
+    <div class="container my-5">
+      <h1>Collabolio API</h1>
+      <p>Welcome to the Collabolio API!</p>
+      <h2>Endpoints</h2>
+      <p>To get started, use the following endpoints:</p>
       <ul>
-        <li>GET /api/user - returns a single user</li>
-        <li>PUT /api/user - updates a user</li>
+        <li>
+          <h4>Get current user</h4>
+          <pre><code>GET /api/user</code></pre>
+          <button
+            class="btn btn-dark"
+            type="button"
+            data-toggle="collapse"
+            data-target="#example-output"
+            aria-expanded="false"
+            aria-controls="example-output"
+          >
+            Example output
+          </button>
+          <div class="collapse" id="example-output">
+            <pre><code>{
+  "username": "john_doe",
+  "googleId": null,
+  "email": "john_doe@gmail.com",
+  "emailVerified": false,
+  "password": "hashed_password",
+  "isAdmin": false,
+  "createdAt": "2023-05-25T12:30:00.000Z",
+  "updatedAt": "2023-05-25T12:30:00.000Z",
+  "lastLoginAt": null,
+  "profile": {
+    "displayName": "John Doe",
+    "phoneNumber": "1234567890",
+    "age": 30,
+    "birthDate": "1993-05-25T00:00:00.000Z",
+    "isMale": true,
+    "bio": "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+    "avatarURL": "https://storage.googleapis.com/collabolio-dev.appspot.com/assets/images/avatars/john_doe.png",
+    "location": {
+      "country": "USA",
+      "city": "Los Angeles",
+      "lat": 34.0522,
+      "lng": -118.2437
+    },
+    "skills": [
+      {
+        "name": "JavaScript"
+      },
+      {
+        "name": "Node.js"
+      },
+      {
+        "name": "React"
+      }
+    ],
+    "interests": [
+      {
+        "name": "Music"
+      },
+      {
+        "name": "Sports"
+      }
+    ],
+    "experience": [
+      {
+        "title": "Full Stack Developer",
+        "company": "ABC Inc.",
+        "startDate": "2020-01-01T00:00:00.000Z",
+        "endDate": null,
+        "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit."
+      }
+    ],
+    "education": [
+      {
+        "degree": "Bachelor's Degree in Computer Science",
+        "school": "XYZ University",
+        "startDate": "2015-01-01T00:00:00.000Z",
+        "endDate": "2019-12-31T00:00:00.000Z",
+        "grade": 3.5
+      }
+    ],
+    "projects": [
+      {
+        "title": "Collabolio Project",
+        "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+        "link": "https://www.collabolio.com"
+      }
+    ],
+    "certifications": [
+      {
+        "name": "Google Cloud Certified - Associate Cloud Engineer",
+        "credentialURL": "https://www.credential.net",
+        "endDate": "2025-05-25T00:00:00.000Z",
+        "skills": [
+          {
+            "name": "Google Cloud Platform"
+          },
+          {
+            "name": "DevOps"
+          }
+        ]
+      }
+    ],
+    "languages": [
+      {
+        "name": "English"
+      },
+      {
+        "name": "Spanish"
+      }
+    ],
+    "socialLinks": [
+      {
+        "name": "LinkedIn",
+        "url": "https://www.linkedin.com/in/john_doe"
+      },
+      {
+        "name": "Twitter",
+        "url": "https://twitter.com/john_doe"
+      }
+    ]
+  }
+}</code></pre>
+          </div>
+        </li>
+        <li>
+          <h4>Update current user</h4>
+          <pre><code>PUT /api/user</code></pre>
+        </li>
       </ul>
       <p>
         All endpoints are accessed via HTTP and return JSON responses. The API
-        is secured using JWT authentication. To use the API, you'll needto
+        is secured using JWT authentication. To use the API, you'll need to
         obtain an access token by authenticating using your credentials.
       </p>
+      <h2>Authentication</h2>
       <p>To manage authentication, use the following endpoints:</p>
       <ul>
         <li>
-          POST /api/auth/login - logs in a user and returns an access token
+          <h4>Login in a user and returns an access token</h4>
+          <pre><code>POST /api/auth/login</code></pre>
+          <table class="table">
+            <thead>
+              <tr>
+                <th>Body</th>
+                <th>Type</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>email</td>
+                <td>string</td>
+                <td><strong>Required</strong>. Email for login</td>
+              </tr>
+              <tr>
+                <td>password</td>
+                <td>string</td>
+                <td><strong>Required</strong>. Password for login</td>
+              </tr>
+            </tbody>
+          </table>
         </li>
-        <li>POST /api/auth/register - creates a new user account</li>
+        <li>
+          <h4>Register a new user account</h4>
+          <pre><code>POST /api/auth/register</code></pre>
+          <table class="table">
+            <thead>
+              <tr>
+                <th>Body</th>
+                <th>Type</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>username</td>
+                <td>string</td>
+                <td><strong>Required</strong>. Username for account</td>
+              </tr>
+              <tr>
+                <td>email</td>
+                <td>string</td>
+                <td><strong>Required</strong>. Email for account</td>
+              </tr>
+              <tr>
+                <td>password</td>
+                <td>string</td>
+                <td><strong>Required</strong>. Password for account</td>
+              </tr>
+            </tbody>
+          </table>
+        </li>
       </ul>
-      <p>
-        For more information on how to use the API, please refer to the
-        documentation.
-      </p>
-      <p>Thank you for using the Collabolio API!</p>
     </div>
-
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
   </body>
 </html>
