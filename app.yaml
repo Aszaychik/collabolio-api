@@ -2,7 +2,7 @@ runtime: nodejs16
 
 env_variables:
   # Server
-  PORT: '3000'
+  PORT: '8080'
   API_URL: 'http://localhost:3000'
   JWT_SECRET: 'Pyitq7vry43VQyVn6epYyoPYJ1FHIIH8hlwvuNxZHMSldAxI1ffbBan4izp2coY'
 
