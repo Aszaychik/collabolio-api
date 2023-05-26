@@ -1,21 +1,24 @@
 import { Request, Response, NextFunction } from 'express';
+import { DecodedIdToken, getAuth } from 'firebase-admin/auth';
 
 // Create me firebase middleware to check token
-export const authorization = (
+export const authorization = async (
   req: Request,
   res: Response,
   next: NextFunction,
 ) => {
   try {
-    const idToken = req.headers.authorization;
+    const idToken: string = req.headers.authorization;
     if (!idToken) {
-      return res.status(401).send('Unauthorized');
+      return res.status(401).json({
+        error: 'Unauthorized',
+        message: 'Missing authorization token',
+      });
     }
+    const decodedToken: DecodedIdToken = await getAuth().verifyIdToken(idToken);
+    req.body.uid = decodedToken.uid;
     next();
   } catch (error) {
-    console.error('Error fetching user data:', error);
-    const statusCode: number = error.code || 500;
-    const errorMessage: string = error.message || 'Could not fetch user';
-    res.status(statusCode).json({ error: errorMessage });
+    return res.status(500).json(error);
   }
 };
