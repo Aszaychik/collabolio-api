@@ -1,9 +1,10 @@
-import { Request, Response, NextFunction } from 'express';
+import { Response, NextFunction } from 'express';
 import { DecodedIdToken, getAuth } from 'firebase-admin/auth';
+import { IAuthRequest } from '../interfaces/IAuth';
 
 // Create me firebase middleware to check token
-export const authorization = async (
-  req: Request,
+export const auth = async (
+  req: IAuthRequest,
   res: Response,
   next: NextFunction,
 ) => {
@@ -16,7 +17,7 @@ export const authorization = async (
       });
     }
     const decodedToken: DecodedIdToken = await getAuth().verifyIdToken(idToken);
-    req.body.uid = decodedToken.uid;
+    req.user = decodedToken;
     next();
   } catch (error) {
     return res.status(500).json(error);
