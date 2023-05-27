@@ -11,7 +11,7 @@ export interface IUsers {
   createdAt: Date;
   updatedAt: Date;
   lastLoginAt?: Date;
-  profile: {
+  profile?: {
     displayName: string;
     phoneNumber?: string;
     age: number;
