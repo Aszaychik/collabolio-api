@@ -14,4 +14,4 @@ app.use(cors()); // Enable Cross-Origin Resource Sharing (CORS) middleware to al
 app.use(express.json()); // Parse incoming requests with JSON payloads
 
 // app.use(authorization); // Add the authorization middleware (for checking the JWT token in the request header)
-app.use('/', routes); // mount the routes
+app.use('/api', routes); // mount the routes
