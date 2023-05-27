@@ -4,6 +4,13 @@ import storage from '../services/cloudStorage';
 import Users from '../models/Users';
 
 export const updateProfilePhoto = (req: IReqUplodFile, res: Response) => {
+  if (!req.currentUser) {
+    return res.status(400).json({
+      message: 'User not found',
+      success: false,
+    });
+  }
+
   if (!req.file) {
     return res.status(400).json({
       message: 'No file uploaded',
@@ -35,6 +42,12 @@ export const updateProfilePhoto = (req: IReqUplodFile, res: Response) => {
     req.file.url = `https://storage.googleapis.com/${process.env.BUCKET_NAME}/${blob.name}`;
 
     const { _id } = req.currentUser;
+    if (!_id) {
+      return res
+        .status(400)
+        .json({ message: 'User not found', success: false });
+    }
+
     try {
       const user = await Users.findByIdAndUpdate(
         _id,
