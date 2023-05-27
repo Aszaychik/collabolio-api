@@ -49,3 +49,14 @@ export const updateUser = async (req: IReqAuth, res: Response) => {
     res.status(500).json({ message: error.message, success: false });
   }
 };
+
+export const getUsers = async (req: IReqAuth, res: Response) => {
+  try {
+    const users = await Users.find();
+    return res
+      .status(200)
+      .json({ message: 'Users found successfully', success: true, users });
+  } catch (error) {
+    res.status(500).json({ message: error.message, success: false });
+  }
+};
