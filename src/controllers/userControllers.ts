@@ -1,12 +1,14 @@
-import { Request, Response } from 'express';
+import { Response } from 'express';
 import Users from '../models/Users';
 import { Types } from 'mongoose';
 import bcrypt from 'bcrypt';
+import { IReqAuth } from '../interfaces/IAuth';
 
-export const getUser = async (req: Request, res: Response) => {
+export const getUser = async (req: IReqAuth, res: Response) => {
   try {
-    const { _id } = req.body.currentUser;
-    if (!Types.ObjectId.isValid(_id)) {
+    const { _id } = req.currentUser;
+    const _idString = _id.toString();
+    if (!Types.ObjectId.isValid(_idString)) {
       return res
         .status(404)
         .json({ message: 'User not found', success: false });
@@ -25,9 +27,9 @@ export const getUser = async (req: Request, res: Response) => {
   }
 };
 
-export const updateUser = async (req: Request, res: Response) => {
+export const updateUser = async (req: IReqAuth, res: Response) => {
   try {
-    const { _id } = req.body.currentUser;
+    const { _id } = req.currentUser;
     const { username, email, password } = req.body;
     const hashedPassword = await bcrypt.hash(password, 10); // 10 is the saltRounds parameter
     const user = await Users.findByIdAndUpdate(
