@@ -14,7 +14,7 @@ export const uploadProfilePhoto = (req: IReqUplodFile, res: Response) => {
   const bucket = storage.bucket(`gs://${process.env.BUCKET_NAME}`);
 
   const blob = bucket.file(
-    `users/${req.currentUser._id}/photo/${req.file.originalname}`,
+    `users/${req.currentUser._id}/photo/${req.file.originalname}-${Date.now()}`,
   );
 
   const blobStream = blob.createWriteStream({
