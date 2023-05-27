@@ -1,9 +1,10 @@
 import jwt, { JwtPayload, VerifyErrors } from 'jsonwebtoken';
-import { Request, Response, NextFunction } from 'express';
+import { Response, NextFunction } from 'express';
 import Users from '../models/Users';
+import { IReqAuth } from '../interfaces/IAuth';
 
 export const authMiddleware = async (
-  req: Request,
+  req: IReqAuth,
   res: Response,
   next: NextFunction,
 ) => {
@@ -26,7 +27,7 @@ export const authMiddleware = async (
         if (!user) {
           return res.status(401).json({ message: 'User not found' });
         }
-        req.body.currentUser = user;
+        req.currentUser = user;
         next();
       },
     );

@@ -2,11 +2,11 @@ import { Request, Response } from 'express';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import Users from '../models/Users';
-import { loginIAuth, registerIAuth } from '../interfaces/IAuth';
+import { ILoginIAuth, IRegisterIAuth } from '../interfaces/IAuth';
 
 export const register = async (req: Request, res: Response) => {
   try {
-    const reqBody: registerIAuth = req.body;
+    const reqBody: IRegisterIAuth = req.body;
 
     // Check if the username, email and password are provided
     if (!reqBody.username || !reqBody.email || !reqBody.password) {
@@ -62,7 +62,7 @@ export const register = async (req: Request, res: Response) => {
 
 export const login = async (req: Request, res: Response) => {
   try {
-    const reqBody: loginIAuth = req.body;
+    const reqBody: ILoginIAuth = req.body;
 
     // Check if the email and password are provided
     if (!reqBody.email || !reqBody.password) {
