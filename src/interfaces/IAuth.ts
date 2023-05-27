@@ -15,5 +15,6 @@ export interface ILoginIAuth {
 export interface IReqAuth extends Request {
   currentUser: {
     _id: ObjectId;
+    isAdmin: boolean;
   };
 }
