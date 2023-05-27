@@ -6,7 +6,7 @@ const db = admin.firestore();
 
 export const getUser = async (req: Request, res: Response): Promise<void> => {
   try {
-    const uid: string = req.body.uid;
+    const uid: string = req.params.uid;
     const userRecord: admin.auth.UserRecord = await getAuth().getUser(uid);
     if (!userRecord) {
       res.status(404).json({ error: 'User not found' });
@@ -26,7 +26,7 @@ export const getUser = async (req: Request, res: Response): Promise<void> => {
   }
 };
 
-export const registerUser = async (
+export const createUser = async (
   req: Request,
   res: Response,
 ): Promise<void> => {
