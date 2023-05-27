@@ -9,18 +9,19 @@ export const getUser = async (req: Request, res: Response) => {
     if (!Types.ObjectId.isValid(_id)) {
       return res
         .status(404)
-        .json({ message: 'User not found', statusCode: 404 });
+        .json({ message: 'User not found', success: false });
     }
     const user = await Users.findById(_id);
-    if (user) {
-      res
-        .status(200)
-        .json({ message: 'User found successfully', user, statusCode: 200 });
-    } else {
-      res.status(404).json({ message: 'User not found', statusCode: 404 });
+    if (!user) {
+      return res
+        .status(404)
+        .json({ message: 'User not found', success: false });
     }
+    return res
+      .status(200)
+      .json({ message: 'User found successfully', success: true, user });
   } catch (error) {
-    res.status(500).json({ message: error.message, statusCode: 500 });
+    return res.status(500).json({ message: error.message, success: false });
   }
 };
 
@@ -34,14 +35,15 @@ export const updateUser = async (req: Request, res: Response) => {
       { username, email, password: hashedPassword, updatedAt: new Date() },
       { new: true },
     );
-    if (user) {
-      res
-        .status(200)
-        .json({ message: 'User updated successfully', user, statusCode: 200 });
-    } else {
-      res.status(404).json({ message: 'User not found', statusCode: 404 });
+    if (!user) {
+      return res
+        .status(404)
+        .json({ message: 'User not found', success: false });
     }
+    return res
+      .status(200)
+      .json({ message: 'User updated successfully', success: true, user });
   } catch (error) {
-    res.status(500).json({ message: error.message, statusCode: 500 });
+    res.status(500).json({ message: error.message, success: false });
   }
 };

@@ -3,8 +3,9 @@ import nodemailer from 'nodemailer';
 import Users from '../models/Users';
 import jwt, { JwtPayload, VerifyErrors } from 'jsonwebtoken';
 import bcrypt from 'bcrypt';
+import { IUsers } from '../interfaces/IUsers';
 
-export const sendEmail = async (user: any, token: string) => {
+const sendEmail = async (user: IUsers, token: string) => {
   const { email, username } = user;
   const transporter = nodemailer.createTransport({
     service: 'gmail',
@@ -14,7 +15,7 @@ export const sendEmail = async (user: any, token: string) => {
     },
   });
 
-  const mailOptions = {
+  const mailOptions: object = {
     from: process.env.SMTP_USER,
     to: email,
     subject: 'Reset Password',
@@ -37,14 +38,14 @@ export const sendEmail = async (user: any, token: string) => {
 
 //create reset password function using JWT
 export const linkResetPassword = async (req: Request, res: Response) => {
-  const email = req.body.email;
-  const user = await Users.findOne({ email: email });
+  const { email } = req.body;
+  const user: IUsers = await Users.findOne({ email: email });
   if (!user) {
     res.status(404).json({
       message: 'User not found',
     });
   }
-  const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET);
+  const token: string = jwt.sign({ userId: user._id }, process.env.JWT_SECRET);
 
   res.status(200).json({
     message: 'Email sent',
@@ -59,26 +60,30 @@ export const linkResetPassword = async (req: Request, res: Response) => {
 export const resetPassword = async (req: Request, res: Response) => {
   const { token } = req.params;
   const { password } = req.body;
-  const hashedPassword = await bcrypt.hash(password, 10); // 10 is the saltRounds parameter
-  jwt.verify(
-    token,
-    process.env.JWT_SECRET,
-    async (err: VerifyErrors, payload: JwtPayload) => {
-      if (err) {
-        return res.status(401).json({ err });
-      }
-      const { userId } = payload;
-      const user = await Users.findByIdAndUpdate(
-        userId,
-        { password: hashedPassword, updatedAt: new Date() },
-        { new: true },
-      );
-      if (!user) {
-        return res.status(401).json({ message: 'User not found' });
-      }
-      return res.status(200).json({
-        message: 'Password reset successfully',
-      });
-    },
-  );
+  try {
+    const hashedPassword: string = await bcrypt.hash(password, 10); // 10 is the saltRounds parameter
+    jwt.verify(
+      token,
+      process.env.JWT_SECRET,
+      async (err: VerifyErrors, payload: JwtPayload) => {
+        if (err) {
+          return res.status(401).json({ err });
+        }
+        const { userId } = payload;
+        const user = await Users.findByIdAndUpdate(
+          userId,
+          { password: hashedPassword, updatedAt: new Date() },
+          { new: true },
+        );
+        if (!user) {
+          return res.status(401).json({ message: 'User not found' });
+        }
+        return res.status(200).json({
+          message: 'Password reset successfully',
+        });
+      },
+    );
+  } catch (error) {
+    res.status(500).json({ message: error.message, success: false });
+  }
 };
