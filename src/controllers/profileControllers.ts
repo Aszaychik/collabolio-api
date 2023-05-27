@@ -3,7 +3,7 @@ import { IReqUplodFile } from '../interfaces/IUploadFile';
 import storage from '../services/cloudStorage';
 import Users from '../models/Users';
 
-export const uploadProfilePhoto = (req: IReqUplodFile, res: Response) => {
+export const updateProfilePhoto = (req: IReqUplodFile, res: Response) => {
   if (!req.file) {
     return res.status(400).json({
       message: 'No file uploaded',
